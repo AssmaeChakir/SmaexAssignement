@@ -2,6 +2,9 @@ FROM node:20
 
 WORKDIR /app
 
+# Expose the port for the PHP server
+EXPOSE 10000
+
 # Copy package.json and package-lock.json if available
 COPY Web/Smaex/package*.json ./
 
@@ -12,4 +15,5 @@ COPY Web/Smaex ./
 
 RUN npm run build
 
-CMD ["npm", "start"]
+# Start the PHP server
+CMD ["php", "-S", "0.0.0.0:10000", "-t", "./backend"]
