@@ -1,7 +1,7 @@
 FROM node:20
 WORKDIR /app
-COPY Web/package*.json ./
+COPY Web/Smaex/package*.json ./
 RUN npm install
-COPY Web .      
+COPY Web Smaex      
 RUN npm run build
 CMD ["npm", "start"]
