@@ -1,7 +1,7 @@
 FROM node:20
 WORKDIR /app
-COPY package*.json ./
+COPY Web/package*.json ./
 RUN npm install
-COPY . .
+COPY Web .      
 RUN npm run build
 CMD ["npm", "start"]
