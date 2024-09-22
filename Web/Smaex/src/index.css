@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    background-color: #f1f1f1;
+    height: 1400px;
+}
+.cursor-not-allowed {
+    cursor: not-allowed;
+}
+.input-box{
+    position: relative;
+    margin-bottom: 20px;
+}
+.input-style {
+    @apply mt-1 block w-full p-3 ;
+    border: 1px solid green;
+    border-radius: 5px;
+    outline: none;
+    color: darkgreen;
+    font-size: 1em;
+}
+.input-style[type="date"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    /* Removes the spinner */
+    margin: 0;
+    /* Removes margin */
+}
+.input-box label{
+    position:absolute;
+    top: 40%;
+    left: 15px;
+    transform: translateY(-50%);
+    pointer-events: none;
+    font-size: 1em;
+    color:rgb(112, 143, 112) ;
+    text-transform: uppercase;
+    transition: 0.5s;
+}
+input[type="date"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    /* Removes the spinner */
+    margin: 0;
+    /* Removes margin */
+}
+
+input[type="date"]::-webkit-datetime-edit {
+    opacity: 0;
+    /* Hides the input value */
+}
+
+input[type="date"]:valid::-webkit-datetime-edit {
+    opacity: 1;
+    /* Shows the input value on focus */
+}
+.input-box input:valid ~ label,
+.input-box input:focus ~ label{
+    top: -10px;
+    left: 10px;  
+    color: rgb(107, 159, 28);
+    transform: translateX(10px) translateY(-7px);
+    font-size: 1em;
+    padding: 0.3rem;
+    background: rgb(238, 244, 238);
+    border-left: 1px solid rgb(107, 159, 28);
+    border-right: 1px solid rgb(107, 159, 28);
+}.checkbox-container {
+    @apply flex items-center;
+    position: relative;
+}
+
+.checkbox-container div {
+    color: darkgreen;
+}
+
+.checkbox-container div:hover {
+    font-weight: bold;
+    color: #54ad57;
+}
+
+.checkbox-container span {
+    position: relative;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-color: #f0f0f0;
+    /* Background for checkbox look */
+    border: 2px solid #ccc;
+    /* Border for checkbox look */
+    border-radius: 3px;
+    margin-right: 8px;
+    /* Space between checkbox and text */
+    cursor: pointer;
+    /* Pointer for better UX */
+}
+
+.checkbox-container span::after {
+    content: '';
+    position: absolute;
+    left: 9px;
+    bottom: 4px;
+    width: 0;
+    height: 0;
+    border: solid #54ad57;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: all 0.2s ease;
+    /* Smooth transition */
+}
+
+/* Apply when checkbox is checked */
+.checkbox-container input:checked+span::after {
+    width: 10px;
+    /* Checkmark width */
+    height: 17px;
+    /* Checkmark height */
+    opacity: 1;
+}
