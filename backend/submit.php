@@ -7,12 +7,15 @@ header("Access-Control-Allow-Headers: Content-Type");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Database credentials
-$servername = "localhost";
-$username = "pma"; // Ensure this is correct
-$password = "assmae";
-$dbname = "smaex";
+require 'vendor/autoload.php';
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$servername = $_ENV['DB_SERVER'];
+$username = $_ENV['DB_USERNAME'];
+$password = $_ENV['DB_PASSWORD'];
+$dbname = $_ENV['DB_NAME'];
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
