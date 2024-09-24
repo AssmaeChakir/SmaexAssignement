@@ -8,12 +8,12 @@ import { StepperContext } from "./contexts/stepperContext";
 
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({ tableData: [] });
   const [finalData, setFinalData] = useState([]);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const steps = [
-    "Première étape",
+    "Etape 1",
     "Etape 2",
     // "Confirmation"
   ];
@@ -51,13 +51,12 @@ function App() {
     if (userData.Domestique) natureActivite.push('Domestique');
     if (userData.Export) natureActivite.push('Export');
 
-    // Similarly, for secteur_economique and clientele
     const secteurEconomique = [];
     if (userData.commerce) secteurEconomique.push('commerce');
     if (userData.prestations_services) secteurEconomique.push('prestations_services');
     if (userData.production_serie) secteurEconomique.push('production_serie');
     if (userData.production_mesure) secteurEconomique.push('production_mesure');
-    if (userData.autres) secteurEconomique.push('production_serie');
+    if (userData.autres) secteurEconomique.push('autres'); // Corrected from 'production_serie'
 
     const clientele = [];
     if (userData.industriels) clientele.push('industriels');
@@ -65,37 +64,78 @@ function App() {
     if (userData.detaillants) clientele.push('detaillants');
     if (userData.filiales_affilies) clientele.push('filiales_affilies');
 
-    // Add other clientele types similarly...
+    const domestique = [];
+    if (userData.mad) domestique.push('mad');
+
+    const xport = [];
+    if (userData.eur) xport.push('eur');
+    if (userData.usd) xport.push('usd');
+
+    const autre = userData.autre || '';
+
+    const auComptant = userData.tableData?.map(row => row.column2) || [];
+    const aCredit = userData.tableData?.map(row => row.column3) || [];
+    const dureeCredit = userData.tableData?.map(row => row.column4) || [];
+    const comptantDocuments = userData.tableData?.map(row => row.column5) || [];
+    const aucomptant = userData.tableData?.map(row => row.aucomptant) || '';
+    const acredit = userData.tableData?.map(row => row.a_crédit) || '';
+  
+    
+    
+
 
     const payload = {
       ...userData,
       nature_activite: natureActivite.join(','), // join to create a string
       secteur_economique: secteurEconomique.join(','),
       clientele: clientele.join(','),
+      au_comptant: auComptant,
+      a_credit: aCredit,
+      duree_credit: dureeCredit,
+      comptant_documents: comptantDocuments,
+      domestique: domestique,
+      xport: xport,
+      autre: autre,
+      aucomptant: aucomptant,
+      acredit: acredit,
     };
+    const newpayload = JSON.stringify(payload)
+    console.log('json',newpayload);
+    
 
-    // Submit to backend
     try {
       const response = await fetch('http://localhost/SmeaxAssignement/backend/submit.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: newpayload, // Directly use payload here
       });
 
-      const result = await response.json();
-      // Handle response
-      if (response.ok) {
-        console.log("Data submitted successfully", result);
-        setIsSubmitted(true); // Set submission state on success
-      } else {
-        console.error("Error submitting data", result.error);
+      const textResponse = await response.text();
+
+      if (!response.ok) {
+        console.error("Error response:", textResponse);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
+
+      let jsonResponse;
+      try {
+        jsonResponse = JSON.parse(textResponse);
+        console.log('jsonResponse',jsonResponse);
+        
+      } catch (error) {
+        console.error('JSON parsing error:', error);
+        throw new Error(`Invalid JSON response: ${textResponse}`);
+      }
+      
+      // Handle successful submission
+      setIsSubmitted(true); // Set submission state on success
     } catch (error) {
       console.error("Submission error", error);
     }
   };
+
 
   // Render different content based on submission state
   return (
@@ -122,14 +162,14 @@ function App() {
 
           </svg>
           <div className='mt-3 text-xl font-semibold uppercase text-green-500'>
-            Votre compte a été créé avec succès!
+            Votre demande a été envoyée avec succès.!
           </div>
           <div className='text-lg font-semibold text-gray-500'>
-                      Merci pour votre inscription. Nous vous contacterons bientôt.
+                       Merci pour votre patience. Nous vous contacterons bientôt.
           </div>
           <a href="/" className='mt-10'>
             <button className='h-10 text-green-700 transition-colors duration-150 border-gray-300 rounded-lg focus:shadow-outline hover:bg-green-500 hover:text-green-100'>
-              close
+            Fermer
           </button>
           </a>
 
